@@ -23,12 +23,14 @@ array_to_excel <- function(data,workbook) {
     temp.dir <- mkdtemp()
     worksheets <- NULL
     for (worksheet in names(data)) {
-        write.table(data[[file]],
-                    file=file.path(temp.dir,worksheet))
+        write.table(data[[worksheet]],
+                    file=file.path(temp.dir,worksheet),
+                    sep="\t"
+                    )
         worksheets <- c(worksheets,
                         file.path(temp.dir,worksheet))
     }
-    system("txt2xls","--output",workbook,worksheets)
+    system(paste(collapse=" ",shQuote(c("txt2xls","--output",workbook,worksheets))))
     unlink(worksheets)
     unlink(temp.dir)
     return(workbook)
